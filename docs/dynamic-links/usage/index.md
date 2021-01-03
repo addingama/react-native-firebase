@@ -137,10 +137,36 @@ The iOS Notes app is a good place to paste your dynamic link and test it opens y
 
 ![android dynamic link first step](https://images.prismic.io/invertase/ac7615cb-ea4f-49d8-ba2e-5d6d4d209520_Screenshot+2020-05-07+at+10.47.48.png?auto=compress,format)
 
-2. Test the domain you created in your Firebase console (first step in `Firebase Setup`). Go to the following location in your browser `[your-domain]/.well-known/assetlinks.json`. The response will have a `target` object containing a `package_name` which ought to have your app's package name. Please
+2. Add your domain to `android/app/src/main/java/AndroidManifest.xml` 
+
+```xml
+<activity
+        android:name=".MainActivity"
+        android:label="@string/app_name"
+        android:configChanges="keyboard|keyboardHidden|orientation|screenSize|uiMode"
+        android:launchMode="singleTask"
+        android:windowSoftInputMode="adjustResize"
+        android:screenOrientation="portrait">
+        <intent-filter>
+            <action android:name="android.intent.action.MAIN" />
+            <category android:name="android.intent.category.LAUNCHER" />
+        </intent-filter>
+        // ==== START ====
+        <intent-filter android:autoVerify="true">
+          <action android:name="android.intent.action.VIEW" />
+          <category android:name="android.intent.category.DEFAULT" />
+          <category android:name="android.intent.category.BROWSABLE" />
+          <data android:scheme="https" android:host="dynamiclinkdomain.page.link" />
+        </intent-filter>
+        // ==== END ====
+      </activity>
+
+```
+
+3. Test the domain you created in your Firebase console (first step in `Firebase Setup`). Go to the following location in your browser `[your-domain]/.well-known/assetlinks.json`. The response will have a `target` object containing a `package_name` which ought to have your app's package name. Please
    do not proceed until you see this, it may take a while to register.
 
-3. Test the dynamic link works via your emulator by pasting it into in a text message, notepad or email, and checking that it does open your application (ensure the app is installed on the emulator).
+4. Test the dynamic link works via your emulator by pasting it into in a text message, notepad or email, and checking that it does open your application (ensure the app is installed on the emulator).
 
 ## Create a Link
 
